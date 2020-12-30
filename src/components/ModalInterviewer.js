@@ -5,14 +5,10 @@ import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
 
 export default function Modal(props) {
   const classes = useStyles();
-  const [isClose, setClose] = useState(props.modalState);
 
-  const handleCloseModal = () => {
-    setClose(false);
-  };
-
+  
   return (
-    <Dialog open={props.modalState} onClose={handleCloseModal} className={classes.root} maxWidth='lg'>
+    <Dialog open={props.modalState} onClose={props.changeState} className={classes.root} maxWidth='lg'>
       <div className='title'>
         <PersonAddRoundedIcon color='primary' fontSize='large' />
         <Typography variant='h5'>Nuevo entrevistador</Typography>
