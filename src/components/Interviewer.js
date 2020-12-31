@@ -1,18 +1,16 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles, Typography } from '@material-ui/core';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 
-export default function Interviewer() {
+export default function Interviewer(props) {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
-    <div className={classes.root} >
+    <div className={classes.root}>
       <PersonRoundedIcon color='primary' className='user_icon' />
-      <Typography variant='h6'>Victor Morfin</Typography>
-      <Typography variant='subtitle1'>#12345</Typography>
-      <Typography variant='subtitle1'>victor.manuel.morfin</Typography>
+      <Typography variant='h6'>{props.interInfo.name}</Typography>
+      <Typography variant='subtitle1' className='to_click' id={props.interInfo.idInter} onClick={props.changeState}>#{props.interInfo.idInter}</Typography>
+      <Typography variant='subtitle1'>{props.interInfo.eid}</Typography>
     </div>
   );
 }
@@ -32,7 +30,7 @@ const useStyles = makeStyles(() => ({
       fontSize: '5em'
     },
 
-    '&:hover':{
+    '& .to_click:hover':{
       cursor: 'pointer'
     }
   }

@@ -10,28 +10,32 @@ import CandidateDetails from './routes/CandidateDetails';
 import Questions from './routes/Questions';
 import Results from './routes/Results';
 
+import { InterviewersContextProvider } from './context/interviewers-context';
+
 function App() {
   return (
     <div className="App">
       <Router>
         <header />
-
+        
         <Switch>
-          <Route path='/' exact>
-            <Interviewers />
-          </Route>
-          <Route path='/candidates' exact>
-            <Candidates />
-          </Route>
-          <Route path='/candidates/:id' exact>
-            <CandidateDetails />
-          </Route>
-          <Route path='/interview'>
-            <Questions />
-          </Route>
-          <Route path='/results'>
-            <Results />
-          </Route>
+          <InterviewersContextProvider>
+            <Route path='/' exact>
+              <Interviewers />
+            </Route>
+            <Route path='/candidates-of/:id' exact>
+              <Candidates />
+            </Route>
+            <Route path='/candidate/:id' exact>
+              <CandidateDetails />
+            </Route>
+            <Route path='/interview/:id'>
+              <Questions />
+            </Route>
+            <Route path='/results/:id'>
+              <Results />
+            </Route>
+          </InterviewersContextProvider>
         </Switch>
       </Router>
     </div>

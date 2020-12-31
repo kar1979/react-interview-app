@@ -1,49 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography } from '@material-ui/core';
+import React, { useState, useContext } from 'react';
+import { makeStyles, Container, Typography } from '@material-ui/core';
 import BtnAddInterviewer from '../components/BtnAddInterviewer';
 import ModalInterviewer from '../components/ModalInterviewer';
 import Interviewer from '../components/Interviewer';
+import { InterviewersContext } from '../context/interviewers-context';
 
 export default function Interviewers() {
   const classes = useStyles();
-  const [isOpen, setOpen] = useState(false);
-  const [isClose, setClose] = useState(isOpen);
-  // let isOpen = false;
+  const [ initialInters ] = useContext(InterviewersContext);
+  const [ selectedInter, setSelectedInter ] = useState(null);
+  const [ isOpen, setModalState ] = useState(false);
 
-  const handleOpenModal = () => {
-    setOpen(!isOpen);
+  const selectedInters = initialInters.interviewers;
+
+  const handleModalState = (event) => {
+    if (event !== undefined) {
+      toSelectedInter(event);
+    }
+    setModalState(!isOpen);
   };
 
-  const handleCloseModal = () => {
-    setClose(false);
-  };
+  const toSelectedInter = (interviewer) => {
+    const tempSelectedInter = Number(interviewer.target.id);
+    setSelectedInter(tempSelectedInter);
+  }
 
-  // useEffect(){};
-  console.log('From inter ', isOpen);
   return (
     <div className={classes.root}>
       <Container maxWidth='xl'>
         <h2>Entrevistadores</h2>
       </Container>
 
-      {/*<Container className='interviewers'>
-        <Interviewer />
-        <div className='other_inter btn_inters'>
-          <BtnAddInterviewer />
-          <Typography variant='subtitle1'>Haz click aquí para añadir a otro entrevistador</Typography>
-        </div>
-      </Container>*/}
+      <ModalInterviewer
+        modalState={isOpen}
+        totalInters={selectedInters}
+        changeState={handleModalState}
+        interIdSelected={selectedInter}
+      />
 
-      <Container maxWidth='xl' className='no_interviewer'>
-        <h4>No se ha registrado ningún entrevistador</h4>
-        <Container className='actions_inter btn_inters'>
-          <BtnAddInterviewer onClick={handleOpenModal} className='' />
-          <ModalInterviewer modalState={isOpen} changeState={handleOpenModal}/>
-          <p>Haga click aquí para añadir</p>
+      {selectedInters.length !== 0 ?
+        <Container className='interviewers'>
+          {selectedInters.map(inter => (
+            <Interviewer
+              key={inter.id}
+              interInfo={inter}
+              changeState={handleModalState}
+            />
+          ))}
+
+          <div className='other_inter btn_inters'>
+            <BtnAddInterviewer onClick={handleModalState} />
+            <Typography variant='subtitle1'>Haz click aquí para añadir a otro entrevistador</Typography>
+          </div>
         </Container>
-      </Container>
-
+      :
+        <Container className='no_interviewer'>
+          <h4>No se ha registrado ningún entrevistador</h4>
+          <Container className='actions_inter btn_inters'>
+            <BtnAddInterviewer onClick={handleModalState} />
+            <p>Haga click aquí para añadir</p>
+          </Container>
+        </Container>
+      }
     </div>
   );
 }
@@ -54,10 +72,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-
-    '& .btn_inters:hover': {
-      cursor: 'pointer'
-    },
 
     '& .interviewers': {
       display: 'inline-flex',
@@ -75,6 +89,10 @@ const useStyles = makeStyles(() => ({
       padding: '0 1em',
       margin: '1em 0',
       textAlign: 'center'
+    },
+
+    '& .btn_inters:hover': {
+      cursor: 'pointer'
     },
 
     '& .no_interviewer': {
