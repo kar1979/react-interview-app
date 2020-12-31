@@ -8,6 +8,7 @@ import Interviewers from './routes/Interviewers';
 import Candidates from './routes/Candidates';
 import CandidateDetails from './routes/CandidateDetails';
 import Questions from './routes/Questions';
+import Results from './routes/Results';
 
 function App() {
   return (
@@ -28,7 +29,9 @@ function App() {
           <Route path='/interview'>
             <Questions />
           </Route>
-          <Route path='/results'></Route>
+          <Route path='/results'>
+            <Results />
+          </Route>
         </Switch>
       </Router>
     </div>
