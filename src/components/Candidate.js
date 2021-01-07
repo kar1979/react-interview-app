@@ -2,15 +2,16 @@ import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 
-export default function Candidate() {
+export default function Candidate(props) {
   const classes = useStyles();
 
   return(
     <div className={classes.root}>
       <PersonRoundedIcon color='primary' className='user_icon' />
-      <Typography variant='h6'>Manuel Morfin</Typography>
-      <Typography variant='subtitle1'>#12345</Typography>
-      <Typography variant='subtitle1'>manuel.morfin</Typography>
+      <Typography variant='h6'>{props.candidateInfo.name}</Typography>
+      <Typography variant='subtitle1'>{props.candidateInfo.email}</Typography>
+      <Typography variant='subtitle1' color='primary' className='to_click' id={props.candidateInfo.id} onClick={props.changeState}>#{props.candidateInfo.id}</Typography>
+      <Typography variant='subtitle1'>{props.candidateInfo.type}</Typography>
     </div>
   );
 }
@@ -30,7 +31,7 @@ const useStyles = makeStyles(() => ({
       fontSize: '5em'
     },
 
-    '&:hover':{
+    '& .to_click:hover':{
       cursor: 'pointer'
     }
   }

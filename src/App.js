@@ -11,6 +11,8 @@ import Questions from './routes/Questions';
 import Results from './routes/Results';
 
 import { InterviewersContextProvider } from './context/interviewers-context';
+import { CandidatesContextProvider } from './context/candidates-context';
+import { SkillsContextProvider } from './context/skills-context';
 
 function App() {
   return (
@@ -20,21 +22,25 @@ function App() {
         
         <Switch>
           <InterviewersContextProvider>
-            <Route path='/' exact>
-              <Interviewers />
-            </Route>
-            <Route path='/candidates-of/:id' exact>
-              <Candidates />
-            </Route>
-            <Route path='/candidate/:id' exact>
-              <CandidateDetails />
-            </Route>
-            <Route path='/interview/:id'>
-              <Questions />
-            </Route>
-            <Route path='/results/:id'>
-              <Results />
-            </Route>
+            <CandidatesContextProvider>
+              <SkillsContextProvider>
+                <Route path='/' exact>
+                  <Interviewers />
+                </Route>
+                <Route path='/candidates-of/:id/' exact>
+                  <Candidates />
+                </Route>
+                <Route path='/candidates-of/:id/candidate/:id'>
+                  <CandidateDetails />
+                </Route>
+                <Route path='/interview/:id'>
+                  <Questions />
+                </Route>
+                <Route path='/results/:id'>
+                  <Results />
+                </Route>
+              </SkillsContextProvider>
+            </CandidatesContextProvider>
           </InterviewersContextProvider>
         </Switch>
       </Router>

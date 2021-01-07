@@ -1,6 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, Button } from '@material-ui/core';
+import { makeStyles, Container } from '@material-ui/core';
 import QuestionsCarousel from '../components/QuestionsCarousel';
 import Footer from '../components/Footer';
 

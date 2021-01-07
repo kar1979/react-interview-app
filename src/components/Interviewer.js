@@ -9,7 +9,7 @@ export default function Interviewer(props) {
     <div className={classes.root}>
       <PersonRoundedIcon color='primary' className='user_icon' />
       <Typography variant='h6'>{props.interInfo.name}</Typography>
-      <Typography variant='subtitle1' className='to_click' id={props.interInfo.idInter} onClick={props.changeState}>#{props.interInfo.idInter}</Typography>
+      <Typography variant='subtitle1' color='primary' className='to_click' id={props.interInfo.idInter} onClick={props.changeState}>#{props.interInfo.idInter}</Typography>
       <Typography variant='subtitle1'>{props.interInfo.eid}</Typography>
     </div>
   );

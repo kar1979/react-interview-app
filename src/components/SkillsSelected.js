@@ -1,35 +1,25 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent, Container, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import ExtensionRoundedIcon from '@material-ui/icons/ExtensionRounded';
+import { Container, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRounded';
 
-export default function SkillsSelected() {
+export default function SkillsSelected(props) {
   const classes = useStyles();
+  const currentSkills = props.actualSkills;
+
+  console.log(currentSkills);
 
   return (
     <Container className={classes.root}>
       <List>
-        <ListItem disableGutters='true'>
-          <ListItemIcon className='icon_list' >
-            <FiberManualRecordRoundedIcon className='icon_item' />
-          </ListItemIcon>
-          <ListItemText primary='HTML' />
-        </ListItem>
-
-        <ListItem disableGutters='true'>
-          <ListItemIcon className='icon_list'>
-            <FiberManualRecordRoundedIcon className='icon_item' />
-          </ListItemIcon>
-          <ListItemText primary='CSS' />
-        </ListItem>
-
-        <ListItem disableGutters='true'>
-          <ListItemIcon className='icon_list'>
-            <FiberManualRecordRoundedIcon className='icon_item' />
-          </ListItemIcon>
-          <ListItemText primary='JavaScript' />
-        </ListItem>
+        {currentSkills.map(skill => (
+          <ListItem key={skill.category} disableGutters={true}>
+            <ListItemIcon className='icon_list' >
+              <FiberManualRecordRoundedIcon className='icon_item' />
+            </ListItemIcon>
+            <ListItemText primary={skill.categoryName} />
+          </ListItem>
+        ))}
       </List>
     </Container>
   );

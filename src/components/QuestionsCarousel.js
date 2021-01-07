@@ -1,55 +1,90 @@
-import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-
-import MobileStepper from '@material-ui/core/MobileStepper';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import TextField from '@material-ui/core/TextField';
-
+import React, { useState, useContext, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
+import { makeStyles, useTheme, MobileStepper, Paper, Typography, Button, Radio, RadioGroup, FormControlLabel, FormControl, TextField } from '@material-ui/core';
 
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
+import { SkillsContext } from '../context/skills-context';
 
-const tutorialSteps = [
-  {
-    label: '¿Que diferencia existe entre let, var y const?'
-  },
-  {
-    label: '¿Que significa herencia?'
-  },
-  {
-    label: '¿Que diferencia existe entre let, var y const?'
-  },
-  {
-    label: '¿Que significa herencia?'
-  }
+const questions = [
+  { category: 'html', categoryName: 'HTML', question: 'HTML significa `Hyper Text Markup Language`' },
+  { category: 'html', categoryName: 'HTML', question: 'La etiqueta correcta para salto de línea es <lb>' },
+  { category: 'html', categoryName: 'HTML', question: 'La etiqueta <body> contiene todo elcontenido visible de una aplicación web' },
+  { category: 'html', categoryName: 'HTML', question: 'La expresión `<a> http://www.google.com</a>` define correctamente un hipervinculo' },
+  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'css', categoryName: 'CSS', question: '¿Que significa herencia?' },
+  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'git', categoryName: 'Git', question: '¿Que significa herencia?' },
+  { category: 'git', categoryName: 'Git', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'git', categoryName: 'Git', question: '¿Que significa herencia?' },
+  { category: 'git', categoryName: 'Git', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que significa herencia?' },
+  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que significa herencia?' },
+  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'react', categoryName: 'ReactJS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'react', categoryName: 'ReactJS', question: '¿Que significa herencia?' },
+  { category: 'react', categoryName: 'ReactJS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'react', categoryName: 'ReactJS', question: '¿Que significa herencia?' },
+  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'angular', categoryName: 'Angular', question: '¿Que significa herencia?' },
+  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'node', categoryName: 'NodeJS', question: '¿Que significa herencia?' },
+  { category: 'node', categoryName: 'NodeJS', question: '¿Que diferencia existe entre let, var y const?' },
+  { category: 'node', categoryName: 'NodeJS', question: '¿Que significa herencia?' },
+  { category: 'node', categoryName: 'NodeJS', question: '¿Que diferencia existe entre let, var y const?' }
 ];
 
 export default function QuestionsCarousel() {
   const classes = useStyles();
   const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const maxSteps = tutorialSteps.length;
+  const [ state ] = useContext(SkillsContext);
 
-  const [value, setValue] = React.useState('correcto');
+  const [ questionsByCandi, setQuestionsByCandi ] = useState([]);
+  const [ skillsByCandidate, setSkillsByCandidate ] = useState([]);
+  const [ activeQuestion, setActiveQuestion ] = useState(0); 
+  const maxQuestions = questionsByCandi.length;
+
+  let { url } = useRouteMatch();
+  const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
+
+  useEffect(() => {
+    let tempQuestions = [];
+
+    state.skills.forEach(candidate => {
+      if (candidate.candidateId === idCandidate) {
+        setSkillsByCandidate(candidate.categories);
+      }
+    });
+
+    questions.forEach(question => {
+      skillsByCandidate.forEach(skill => {
+        if (question.category === skill.category) {
+          question.id = tempQuestions.length + 1;
+          tempQuestions.push(question);
+        }
+      });
+    });
+    setQuestionsByCandi(tempQuestions);
+  }, []);
+
+  console.log(questionsByCandi);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveQuestion((prevActiveQuestion) => prevActiveQuestion + 1);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveQuestion((prevActiveQuestion) => prevActiveQuestion - 1);
   };
   
-  
-
+  const [value, setValue] = useState('');
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -57,12 +92,12 @@ export default function QuestionsCarousel() {
   return (
     <div className={classes.root}>
       <Paper square elevation={0} className={classes.header}>
-        <Typography color='textSecondary' variant='h5'>JavaScript</Typography>
+        <Typography color='textSecondary' variant='h5'>{questionsByCandi[activeQuestion].categoryName}</Typography>
 
-        <Typography variant='h5'>{tutorialSteps[activeStep].label}</Typography>
+        <Typography variant='h5'>{questionsByCandi[activeQuestion].question}</Typography>
 
-        <FormControl component="fieldset">
-          <RadioGroup aria-label="gender" name="gender1" className='options' value={value} onChange={handleChange} >
+        <FormControl component="fieldset" >
+          <RadioGroup className='options' value={value} onChange={handleChange} >
             <FormControlLabel value="correcto" control={<Radio color='primary' />} label="Correcto" />
             <FormControlLabel value="incorrecto" control={<Radio color='primary' />} label="Incorrecto" />
           </RadioGroup>
@@ -80,17 +115,17 @@ export default function QuestionsCarousel() {
 
       <MobileStepper
         className='carousel_actions'
-        steps={maxSteps}
+        steps={maxQuestions}
         position="static"
         variant="text"
-        activeStep={activeStep}
+        activeStep={activeQuestion}
         nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+          <Button size="small" onClick={handleNext} disabled={activeQuestion === maxQuestions - 1}>
             {theme.direction === 'rtl' ? <ArrowBackIosRoundedIcon color='primary' /> : <ArrowForwardIosRoundedIcon color='primary' />}
           </Button>
         }
         backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+          <Button size="small" onClick={handleBack} disabled={activeQuestion === 0}>
             {theme.direction === 'rtl' ? <ArrowForwardIosRoundedIcon color='primary' /> : <ArrowBackIosRoundedIcon color='primary' />}
           </Button>
         }

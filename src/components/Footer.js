@@ -1,15 +1,14 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, Button } from '@material-ui/core';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { makeStyles, Button } from '@material-ui/core';
 import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
-import BtnAddInterviewer from '../components/BtnAddInterviewer';
-import Candidate from '../components/Candidate';
 
 export default function Candidates() {
   const classes = useStyles();
   const history = useHistory();
+  let { url } = useRouteMatch();
+  const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
 
   return (
     <footer className={classes.root}>
@@ -18,10 +17,14 @@ export default function Candidates() {
         Regresar
       </Button>
 
-      <Button variant='contained' className='start_btn' color='primary' onClick={() => history.push(`/interview`)}>
-        Comenzar
-        <ArrowForwardRoundedIcon />
-      </Button>
+      { url.indexOf('/candidate/') ?
+          <Button variant='contained' className='start_btn' color='primary' onClick={() => history.push(`/interview/${idCandidate}`)}>
+            Comenzar
+            <ArrowForwardRoundedIcon />
+          </Button>
+        :
+          null
+      }
     </footer>
   );
 }

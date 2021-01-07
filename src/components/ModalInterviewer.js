@@ -4,13 +4,13 @@ import { makeStyles, Dialog, DialogContent, Typography, FormControl, DialogActio
 import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
 import { InterviewersContext } from '../context/interviewers-context';
 
-export default function Modal(props) {
+export default function ModalInterviewer(props) {
   const classes = useStyles();
   const history = useHistory();
   const [ state, dispatch ] = useContext(InterviewersContext);
 
   const newIdInter = props.totalInters.length + 1;
-  const [ idInterviewer, setIdInterviewer ] = useState(null);
+  const [ idInterviewer, setIdInterviewer ] = useState('');
   const [ nameInterviewer, setNameInterviewer ] = useState('');
   const [ eidInterviewer, setEidInterviewer ] = useState('');
   const [ idEditInterVal, setIdEditInterVal ] = useState(null);

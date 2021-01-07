@@ -1,9 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent } from '@material-ui/core';
+import { makeStyles, Card, Typography, CardContent } from '@material-ui/core';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 
-export default function CandidateDetail() {
+export default function CandidateDetail(props) {
   const classes = useStyles();
 
   return (
@@ -11,11 +10,11 @@ export default function CandidateDetail() {
       <CardContent className='candidate_card'>
         <PersonRoundedIcon color='primary' className='user_icon' />
         <Typography variant='subtitle2' color='secondary' >Nombre completo</Typography>
-        <Typography variant='subtitle1' className='item'>Victor Manuel Morfin</Typography>
+        <Typography variant='subtitle1' className='item'>{props.detailsCandidate.name}</Typography>
         <Typography variant='subtitle2' color='secondary'>Correo electrónico</Typography>
-        <Typography variant='subtitle1' className='item'>manuel.morfin@accenture.com</Typography>
+        <Typography variant='subtitle1' className='item'>{props.detailsCandidate.email}</Typography>
         <Typography variant='subtitle2' color='secondary'>Tipo</Typography>
-        <Typography variant='subtitle1' className='item'>Interno</Typography>
+        <Typography variant='subtitle1' className='item'>{props.detailsCandidate.type}</Typography>
       </CardContent>
     </Card>
   );

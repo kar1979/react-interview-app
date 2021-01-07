@@ -4,8 +4,7 @@ export const InterviewersContext = createContext();
 
 const initialState = {
   interviewers: [
-    { id: 1, idInter: 3452, name: 'Karla Dávalos Villanueva', eid: 'k.davalos.villanueva'},
-    { id: 2, idInter: 3455, name: 'Victor Manuel Morfin', eid: 'victor.morfin'}
+
   ]
 };
 
