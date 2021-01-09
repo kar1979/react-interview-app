@@ -13,6 +13,7 @@ import Results from './routes/Results';
 import { InterviewersContextProvider } from './context/interviewers-context';
 import { CandidatesContextProvider } from './context/candidates-context';
 import { SkillsContextProvider } from './context/skills-context';
+import { AnswersContextProvider } from './context/answers-context';
 
 function App() {
   return (
@@ -24,21 +25,23 @@ function App() {
           <InterviewersContextProvider>
             <CandidatesContextProvider>
               <SkillsContextProvider>
-                <Route path='/' exact>
-                  <Interviewers />
-                </Route>
-                <Route path='/candidates-of/:id/' exact>
-                  <Candidates />
-                </Route>
-                <Route path='/candidates-of/:id/candidate/:id'>
-                  <CandidateDetails />
-                </Route>
-                <Route path='/interview/:id'>
-                  <Questions />
-                </Route>
-                <Route path='/results/:id'>
-                  <Results />
-                </Route>
+                <AnswersContextProvider>
+                  <Route path='/' exact>
+                    <Interviewers />
+                  </Route>
+                  <Route path='/candidates-of/:id/' exact>
+                    <Candidates />
+                  </Route>
+                  <Route path='/candidates-of/:id/candidate/:id'>
+                    <CandidateDetails />
+                  </Route>
+                  <Route path='/interview/:id'>
+                    <Questions />
+                  </Route>
+                  <Route path='/results/:id'>
+                    <Results />
+                  </Route>
+                </AnswersContextProvider>
               </SkillsContextProvider>
             </CandidatesContextProvider>
           </InterviewersContextProvider>

@@ -6,9 +6,7 @@ import FiberManualRecordRoundedIcon from '@material-ui/icons/FiberManualRecordRo
 export default function SkillsSelected(props) {
   const classes = useStyles();
   const currentSkills = props.actualSkills;
-
-  console.log(currentSkills);
-
+  
   return (
     <Container className={classes.root}>
       <List>

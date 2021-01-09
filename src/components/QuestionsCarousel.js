@@ -1,80 +1,49 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { makeStyles, useTheme, MobileStepper, Paper, Typography, Button, Radio, RadioGroup, FormControlLabel, FormControl, TextField } from '@material-ui/core';
-
+import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import {
+  makeStyles,
+  useTheme,
+  MobileStepper,
+  Paper,
+  Typography,
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  TextField } from '@material-ui/core';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
-import { SkillsContext } from '../context/skills-context';
+import { AnswersContext } from '../context/answers-context';
 
-const questions = [
-  { category: 'html', categoryName: 'HTML', question: 'HTML significa `Hyper Text Markup Language`' },
-  { category: 'html', categoryName: 'HTML', question: 'La etiqueta correcta para salto de línea es <lb>' },
-  { category: 'html', categoryName: 'HTML', question: 'La etiqueta <body> contiene todo elcontenido visible de una aplicación web' },
-  { category: 'html', categoryName: 'HTML', question: 'La expresión `<a> http://www.google.com</a>` define correctamente un hipervinculo' },
-  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'css', categoryName: 'CSS', question: '¿Que significa herencia?' },
-  { category: 'css', categoryName: 'CSS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'git', categoryName: 'Git', question: '¿Que significa herencia?' },
-  { category: 'git', categoryName: 'Git', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'git', categoryName: 'Git', question: '¿Que significa herencia?' },
-  { category: 'git', categoryName: 'Git', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que significa herencia?' },
-  { category: 'javascript', categoryName: 'JavaScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que significa herencia?' },
-  { category: 'typescript', categoryName: 'TypeScript', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'react', categoryName: 'ReactJS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'react', categoryName: 'ReactJS', question: '¿Que significa herencia?' },
-  { category: 'react', categoryName: 'ReactJS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'react', categoryName: 'ReactJS', question: '¿Que significa herencia?' },
-  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'angular', categoryName: 'Angular', question: '¿Que significa herencia?' },
-  { category: 'angular', categoryName: 'Angular', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'node', categoryName: 'NodeJS', question: '¿Que significa herencia?' },
-  { category: 'node', categoryName: 'NodeJS', question: '¿Que diferencia existe entre let, var y const?' },
-  { category: 'node', categoryName: 'NodeJS', question: '¿Que significa herencia?' },
-  { category: 'node', categoryName: 'NodeJS', question: '¿Que diferencia existe entre let, var y const?' }
-];
-
-export default function QuestionsCarousel() {
+export default function QuestionsCarousel(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [ state ] = useContext(SkillsContext);
+  const history = useHistory();
+  const [ state, dispatch ] = useContext(AnswersContext);
 
-  const [ questionsByCandi, setQuestionsByCandi ] = useState([]);
-  const [ skillsByCandidate, setSkillsByCandidate ] = useState([]);
-  const [ activeQuestion, setActiveQuestion ] = useState(0); 
-  const maxQuestions = questionsByCandi.length;
+  const [ activeQuestion, setActiveQuestion ] = useState(0);
 
-  let { url } = useRouteMatch();
-  const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
+  const questionsByCandidate = props.questionsCandidate;
+  const maxQuestions = props.questionsCandidate.length;
+  const idCandidate = props.idCan;
+  let tempDefaultAnswers = [];
 
-  useEffect(() => {
-    let tempQuestions = [];
+  const [ radioValue, setValue] = useState(tempDefaultAnswers);
 
-    state.skills.forEach(candidate => {
-      if (candidate.candidateId === idCandidate) {
-        setSkillsByCandidate(candidate.categories);
-      }
-    });
-
-    questions.forEach(question => {
-      skillsByCandidate.forEach(skill => {
-        if (question.category === skill.category) {
-          question.id = tempQuestions.length + 1;
-          tempQuestions.push(question);
-        }
+  const setDefaultAnswers = () => {
+    questionsByCandidate.forEach((question, i) => {
+      tempDefaultAnswers.push({
+        idAnswer: i + 1,
+        idCandidate: idCandidate,
+        idQuestion: question.idQuestion,
+        question: question.question,
+        category: question.category,
+        categoryName: question.categoryName,
+        answer: ''
       });
     });
-    setQuestionsByCandi(tempQuestions);
-  }, []);
-
-  console.log(questionsByCandi);
+  };
 
   const handleNext = () => {
     setActiveQuestion((prevActiveQuestion) => prevActiveQuestion + 1);
@@ -83,21 +52,50 @@ export default function QuestionsCarousel() {
   const handleBack = () => {
     setActiveQuestion((prevActiveQuestion) => prevActiveQuestion - 1);
   };
-  
-  const [value, setValue] = useState('');
+
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setValue({
+      ...radioValue,
+      [event.target.name-1]: {
+        idAnswer: Number(event.target.name),
+        idCandidate: idCandidate,
+        idQuestion: tempDefaultAnswers[activeQuestion].idQuestion,
+        question: tempDefaultAnswers[activeQuestion].question,
+        category: tempDefaultAnswers[activeQuestion].category,
+        categoryName: tempDefaultAnswers[activeQuestion].categoryName,
+        answer: event.target.value
+    }});
   };
 
+  const onSubmit = () => {
+    dispatch({
+      type: "SEND_ANSWERS",
+      payload: {
+        ...radioValue
+      }
+    });
+    goToResults();
+  }
+
+  const goToResults = () => {
+    history.push(`/results/${idCandidate}`);
+  }
+  
+  console.log('Rspuestas: ', tempDefaultAnswers);
+  console.log('Valores: ', radioValue);
   return (
     <div className={classes.root}>
+      {setDefaultAnswers()}
       <Paper square elevation={0} className={classes.header}>
-        <Typography color='textSecondary' variant='h5'>{questionsByCandi[activeQuestion].categoryName}</Typography>
-
-        <Typography variant='h5'>{questionsByCandi[activeQuestion].question}</Typography>
+        <Typography color='textSecondary' variant='h5'>{questionsByCandidate[activeQuestion].categoryName}</Typography>
+        <Typography variant='h5'>{questionsByCandidate[activeQuestion].question}</Typography>
 
         <FormControl component="fieldset" >
-          <RadioGroup className='options' value={value} onChange={handleChange} >
+          <RadioGroup
+            className='options'
+            onChange={handleChange}
+            value={radioValue[activeQuestion].answer}
+            name={tempDefaultAnswers[activeQuestion].idAnswer}>
             <FormControlLabel value="correcto" control={<Radio color='primary' />} label="Correcto" />
             <FormControlLabel value="incorrecto" control={<Radio color='primary' />} label="Incorrecto" />
           </RadioGroup>
@@ -130,6 +128,14 @@ export default function QuestionsCarousel() {
           </Button>
         }
       />
+
+      {activeQuestion === maxQuestions-1?
+        <Button variant='contained' className='send_test' color='primary' onClick={onSubmit}>
+          Finalizar
+        </Button>
+        :
+        null
+      }
     </div>
   );
 }
@@ -149,9 +155,16 @@ const useStyles = makeStyles((theme) => ({
         top: '-10em'
       },
 
-      '& svg':{
+      '& svg': {
         fontSize: '7em'
       }
+    },
+
+    '& .send_test': {
+      position: 'absolute',
+      right: '2em',
+      bottom: '100px',
+      zIndex: '99'
     }
   },
   header: {

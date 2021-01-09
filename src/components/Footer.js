@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { makeStyles, Button } from '@material-ui/core';
 import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded';
@@ -9,21 +9,44 @@ export default function Candidates() {
   const history = useHistory();
   let { url } = useRouteMatch();
   const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
+  const [ textButton, setTextButton ] = useState('');
+  const [ route, setRoute ] = useState('');
+  const [ visible, setVisible ] = useState(false);
+  const [ visibleBack, setVisibleBack ] = useState(true);
+  
+  useEffect(() => {
+    if (url.indexOf('/candidates-of/') === 0 && url.indexOf('/candidate/') === 18) {
+      setTextButton('Comenzar');
+      setRoute(`/interview/${idCandidate}`);
+      setVisible(true);
+    } else if (url.indexOf('/results/') === 0) {
+      setVisibleBack(false);
+    /*}  else if ( url.indexOf('/interview/') === 0) {
+      setTextButton('Finalizar');
+      setRoute(`/interview/${idCandidate}`);
+      setVisible(true);
+    */
+    } else {
+      setVisible(false);
+    }
+  }, [url]);
 
   return (
     <footer className={classes.root}>
-      <Button variant='contained' className='back_btn' onClick={() => history.goBack()}>
-        <ArrowBackRoundedIcon />
-        Regresar
-      </Button>
+      {visibleBack === true ?
+        <Button variant='contained' className='back_btn' onClick={() => history.goBack()}>
+          <ArrowBackRoundedIcon />
+          Regresar
+        </Button>
+        :null
+      }
 
-      { url.indexOf('/candidate/') ?
-          <Button variant='contained' className='start_btn' color='primary' onClick={() => history.push(`/interview/${idCandidate}`)}>
-            Comenzar
-            <ArrowForwardRoundedIcon />
-          </Button>
-        :
-          null
+      {visible === true ?
+        <Button variant='contained' className='start_btn' color='primary' onClick={() => history.push(route)}>
+          {textButton}
+          <ArrowForwardRoundedIcon />
+        </Button>
+        :null
       }
     </footer>
   );

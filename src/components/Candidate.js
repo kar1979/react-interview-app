@@ -11,7 +11,7 @@ export default function Candidate(props) {
       <Typography variant='h6'>{props.candidateInfo.name}</Typography>
       <Typography variant='subtitle1'>{props.candidateInfo.email}</Typography>
       <Typography variant='subtitle1' color='primary' className='to_click' id={props.candidateInfo.id} onClick={props.changeState}>#{props.candidateInfo.id}</Typography>
-      <Typography variant='subtitle1'>{props.candidateInfo.type}</Typography>
+      <Typography variant='subtitle1' className='type_text'>{props.candidateInfo.type}</Typography>
     </div>
   );
 }
@@ -33,6 +33,10 @@ const useStyles = makeStyles(() => ({
 
     '& .to_click:hover':{
       cursor: 'pointer'
+    },
+
+    '& .type_text': {
+      textTransform: 'capitalize'
     }
   }
 }));

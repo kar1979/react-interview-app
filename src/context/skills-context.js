@@ -19,6 +19,14 @@ const initialState = {
         { category: 'css', categoryName: 'CSS' },
         { category: 'angular', categoryName: 'Angular' }
       ]
+    },
+    {
+      id: 3,
+      candidateId: 2,
+      categories: [
+        { category: 'git', categoryName: 'Git' },
+        { category: 'react', categoryName: 'ReactJS' }
+      ]
     }
   ],
 };

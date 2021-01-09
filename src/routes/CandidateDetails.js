@@ -21,7 +21,7 @@ export default function CandidateDetails() {
         setcurrentCandidate(candidate)
       }
     });
-  }, []);
+  });
   
   return(
     <div className={classes.root}>

@@ -40,7 +40,7 @@ export default function ModalSkills(props) {
   const handleChange = (event) => {
     setToCheck({ ...toCheck, [event.target.name]: event.target.checked });
   };
-  console.log(toCheck);
+  // console.log(toCheck);
 
   return (
     <Dialog
