@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
   useTheme,
@@ -22,14 +22,13 @@ export default function QuestionsCarousel(props) {
   const history = useHistory();
   const [ state, dispatch ] = useContext(AnswersContext);
 
-  const [ activeQuestion, setActiveQuestion ] = useState(0);
-
   const questionsByCandidate = props.questionsCandidate;
   const maxQuestions = props.questionsCandidate.length;
   const idCandidate = props.idCan;
   let tempDefaultAnswers = [];
 
-  const [ radioValue, setValue] = useState(tempDefaultAnswers);
+  const [ activeQuestion, setActiveQuestion ] = useState(0);
+  const [ radioValue, setAnswerValue] = useState(tempDefaultAnswers);
 
   const setDefaultAnswers = () => {
     questionsByCandidate.forEach((question, i) => {
@@ -40,7 +39,8 @@ export default function QuestionsCarousel(props) {
         question: question.question,
         category: question.category,
         categoryName: question.categoryName,
-        answer: ''
+        answer: '',
+        comments: ''
       });
     });
   };
@@ -53,26 +53,35 @@ export default function QuestionsCarousel(props) {
     setActiveQuestion((prevActiveQuestion) => prevActiveQuestion - 1);
   };
 
-  const handleChange = (event) => {
-    setValue({
-      ...radioValue,
-      [event.target.name-1]: {
-        idAnswer: Number(event.target.name),
-        idCandidate: idCandidate,
-        idQuestion: tempDefaultAnswers[activeQuestion].idQuestion,
-        question: tempDefaultAnswers[activeQuestion].question,
-        category: tempDefaultAnswers[activeQuestion].category,
-        categoryName: tempDefaultAnswers[activeQuestion].categoryName,
-        answer: event.target.value
-    }});
+  const handleChangeAnswer = (event) => {
+    let temNewArray = [...radioValue];
+    temNewArray[event.target.name-1] = {
+      idAnswer: Number(event.target.name),
+      idCandidate: idCandidate,
+      idQuestion: tempDefaultAnswers[activeQuestion].idQuestion,
+      question: tempDefaultAnswers[activeQuestion].question,
+      category: tempDefaultAnswers[activeQuestion].category,
+      categoryName: tempDefaultAnswers[activeQuestion].categoryName,
+      answer: event.target.value,
+      comments: ''
+    };
+    setAnswerValue(temNewArray);
+  };
+
+  const handleChangeComments = (event) => {
+    let temNewArray = [...radioValue];
+    temNewArray[event.target.name-1] = {
+      ...temNewArray[event.target.name-1],
+      answer: radioValue[event.target.name-1].answer,
+      comments: event.target.value
+    };
+    setAnswerValue(temNewArray);
   };
 
   const onSubmit = () => {
     dispatch({
       type: "SEND_ANSWERS",
-      payload: {
-        ...radioValue
-      }
+      payload: [...radioValue]
     });
     goToResults();
   }
@@ -81,8 +90,6 @@ export default function QuestionsCarousel(props) {
     history.push(`/results/${idCandidate}`);
   }
   
-  console.log('Rspuestas: ', tempDefaultAnswers);
-  console.log('Valores: ', radioValue);
   return (
     <div className={classes.root}>
       {setDefaultAnswers()}
@@ -93,9 +100,9 @@ export default function QuestionsCarousel(props) {
         <FormControl component="fieldset" >
           <RadioGroup
             className='options'
-            onChange={handleChange}
-            value={radioValue[activeQuestion].answer}
-            name={tempDefaultAnswers[activeQuestion].idAnswer}>
+            onChange={handleChangeAnswer}
+            name={tempDefaultAnswers[activeQuestion].idAnswer}
+            value={radioValue[activeQuestion].answer}>
             <FormControlLabel value="correcto" control={<Radio color='primary' />} label="Correcto" />
             <FormControlLabel value="incorrecto" control={<Radio color='primary' />} label="Incorrecto" />
           </RadioGroup>
@@ -107,8 +114,10 @@ export default function QuestionsCarousel(props) {
           multiline
           rows={4}
           variant="outlined"
+          name={tempDefaultAnswers[activeQuestion].idAnswer}
+          value={radioValue[activeQuestion].comments}
+          onChange={handleChangeComments}
         />
-
       </Paper>
 
       <MobileStepper

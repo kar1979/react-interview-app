@@ -6,7 +6,7 @@ export default function CandidateDetail(props) {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} style={{width: props.widthContainer}} >
       <CardContent className='candidate_card'>
         <PersonRoundedIcon color='primary' className='user_icon' />
         <Typography variant='subtitle2' color='secondary' >Nombre completo</Typography>
@@ -14,7 +14,7 @@ export default function CandidateDetail(props) {
         <Typography variant='subtitle2' color='secondary'>Correo electrónico</Typography>
         <Typography variant='subtitle1' className='item'>{props.detailsCandidate.email}</Typography>
         <Typography variant='subtitle2' color='secondary'>Tipo</Typography>
-        <Typography variant='subtitle1' className='item'>{props.detailsCandidate.type}</Typography>
+        <Typography variant='subtitle1' className='item type'>{props.detailsCandidate.type}</Typography>
       </CardContent>
     </Card>
   );
@@ -22,7 +22,6 @@ export default function CandidateDetail(props) {
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: '48%',
     display: 'flex',
     flexDirection: 'column',
 
@@ -36,6 +35,10 @@ const useStyles = makeStyles(() => ({
 
     '& .item': {
       marginBottom: '0.5em'
+    },
+
+    '& .type': {
+      textTransform: 'capitalize'
     }
   }
 }));

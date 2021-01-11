@@ -3,10 +3,7 @@ import React, { createContext, useReducer } from 'react';
 export const CandidatesContext = createContext();
 
 const initialState = {
-  candidates: [
-    { id: 1, name: 'Karla Dávalos Villanueva', email: 'k.davalos.villanueva@accenture.com', type: 'externo'},
-    { id: 2, name: 'Victor Manuel Morfin', email: 'victor.morfin@accenture.com', type: 'interno'}
-  ]
+  candidates: []
 };
 
 const reducer = (state, action) => {
