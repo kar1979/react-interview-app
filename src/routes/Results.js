@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { makeStyles, Container, Button, Typography, TextField } from '@material-ui/core';
 import { CandidatesContext } from '../context/candidates-context';
@@ -7,6 +7,7 @@ import { AnswersContext } from '../context/answers-context';
 
 import CardCandidateDetail from '../components/CardCandidateDetail';
 import SkillsSelected from '../components/SkillsSelected';
+import Qualification from '../components/Qualification';
 
 export default function Results() {
   const classes = useStyles();
@@ -17,6 +18,7 @@ export default function Results() {
   
   const { url } = useRouteMatch();
   const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
+  
   const selectedCandidate = candidateDetails.candidates.filter(
     candidate => candidate.id === idCandidate
   );
@@ -24,12 +26,27 @@ export default function Results() {
     skill => skill.id === idCandidate
   );
 
+  const answersByCandidate = candidateAnswer.answers.answers.filter(
+    answer => answer.idCandidate === idCandidate
+  );
+
   const skills = skillsByCandidate[0].categories;
+  let questionsByCandidate = [];
 
-  console.log(candidateAnswer.questions);
-
+  const setQuestionsByCandidate = () => {
+    candidateAnswer.questions.filter( question => {
+      skillsByCandidate[0].categories.forEach((category) => {
+        if(question.category === category.category) {
+          questionsByCandidate.push(question);
+        }
+      });
+    });
+    
+  }
+  
   return(
     <div className={classes.root}>
+      {setQuestionsByCandidate()}
       <Container maxWidth='xl'>
         <h2>Resumen</h2>
       </Container>
@@ -45,12 +62,16 @@ export default function Results() {
 
           <Container className='container_skill'>
             <Typography variant='subtitle2' color='secondary'>Skill</Typography>
-            <SkillsSelected actualSkills={skills}/>
+            <SkillsSelected actualSkills={skills} />
           </Container>
 
           <Container className='container_skill'>
             <Typography variant='subtitle2' color='secondary'>Puntaje</Typography>
-
+            <Qualification
+              questionsCandidate={questionsByCandidate}
+              answersCandidate={answersByCandidate}
+              actualSkills={skills}
+            />
           </Container>
         </Container>
 
@@ -62,7 +83,6 @@ export default function Results() {
             variant="outlined"
             value=""
             fullWidth
-            disabled
           />
         </Container>
       </Container>

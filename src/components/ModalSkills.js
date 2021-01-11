@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   makeStyles,
   Dialog,
@@ -11,6 +11,7 @@ import {
   Checkbox
 } from '@material-ui/core';
 import ExtensionRoundedIcon from '@material-ui/icons/ExtensionRounded';
+import { SkillsContext } from '../context/skills-context';
 
 export default function ModalSkills(props) {
   const classes = useStyles();
@@ -24,7 +25,9 @@ export default function ModalSkills(props) {
     {category: 'react', categoryName: 'ReactJS'},
     {category: 'angular', categoryName: 'Angular'},
     {category: 'node', categoryName: 'NodeJS'}
-  ]
+  ];
+  const closeModal = props.changeState;
+  let tempSkills = [];
 
   const [ toCheck, setToCheck ] = useState({
     html: false,
@@ -37,10 +40,29 @@ export default function ModalSkills(props) {
     node: false
   });
 
+  const [ state, dispatch ] = useContext(SkillsContext);
+
   const handleChange = (event) => {
     setToCheck({ ...toCheck, [event.target.name]: event.target.checked });
   };
-  // console.log(toCheck);
+
+  const onSubmit = () => {
+    skills.filter(skill => {
+      if (toCheck[skill.category] === true) {
+        tempSkills.push(skill);
+      }
+    });
+
+    dispatch({
+      type: "ADD_SKILLS",
+      payload: {
+        candidateId: Number(props.idCandidate),
+        categories: tempSkills
+      }
+    });
+
+    closeModal();
+  }
 
   return (
     <Dialog
@@ -74,7 +96,7 @@ export default function ModalSkills(props) {
 
       <DialogActions className='actions_modal'>
         <Button variant="contained" color='secondary' onClick={props.changeState}>Cancelar</Button>
-        <Button variant="contained" color='primary'>Guardar</Button>
+        <Button variant="contained" color='primary' onClick={onSubmit}>Guardar</Button>
       </DialogActions>
     </Dialog>
   );

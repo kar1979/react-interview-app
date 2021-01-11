@@ -2,32 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { makeStyles, Button } from '@material-ui/core';
 import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded';
-import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 
 export default function Candidates() {
   const classes = useStyles();
   const history = useHistory();
   let { url } = useRouteMatch();
-  const idCandidate = Number(url.slice(url.lastIndexOf('/') + 1, url.length));
-  const [ textButton, setTextButton ] = useState('');
-  const [ route, setRoute ] = useState('');
-  const [ visible, setVisible ] = useState(false);
   const [ visibleBack, setVisibleBack ] = useState(true);
   
   useEffect(() => {
-    if (url.indexOf('/candidates-of/') === 0 && url.indexOf('/candidate/') === 18) {
-      setTextButton('Comenzar');
-      setRoute(`/interview/${idCandidate}`);
-      setVisible(true);
-    } else if (url.indexOf('/results/') === 0) {
+    if (url.indexOf('/results/') === 0) {
       setVisibleBack(false);
-    /*}  else if ( url.indexOf('/interview/') === 0) {
-      setTextButton('Finalizar');
-      setRoute(`/interview/${idCandidate}`);
-      setVisible(true);
-    */
-    } else {
-      setVisible(false);
     }
   }, [url]);
 
@@ -38,15 +22,8 @@ export default function Candidates() {
           <ArrowBackRoundedIcon />
           Regresar
         </Button>
-        :null
-      }
-
-      {visible === true ?
-        <Button variant='contained' className='start_btn' color='primary' onClick={() => history.push(route)}>
-          {textButton}
-          <ArrowForwardRoundedIcon />
-        </Button>
-        :null
+      :
+        null
       }
     </footer>
   );

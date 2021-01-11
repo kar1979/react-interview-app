@@ -3,16 +3,7 @@ import React, { createContext, useReducer } from 'react';
 export const AnswersContext = createContext();
 
 const initialState = {
-  answers: [
-    { idCandidate: 1, idQuestion: 1, idAnswer: 1, category: "html", categoryName: "HTML", answer: "correcto"},
-    { idCandidate: 1, idQuestion: 2, idAnswer: 2, category: "html", categoryName: "HTML", answer: "incorrecto"},
-    { idCandidate: 1, idQuestion: 3, idAnswer: 3, category: "html", categoryName: "HTML", answer: "correcto"},
-    { idCandidate: 1, idQuestion: 4, idAnswer: 4, category: "html", categoryName: "HTML", answer: "incorrecto"},
-    { idCandidate: 1, idQuestion: 13, idAnswer: 5, category: "javascript", categoryName: "JavaScript", answer: "correcto"},
-    { idCandidate: 1, idQuestion: 14, idAnswer: 6, category: "javascript", categoryName: "JavaScript", answer: "incorrecto"},
-    { idCandidate: 1, idQuestion: 15, idAnswer: 7, category: "javascript", categoryName: "JavaScript", answer: "correcto"},
-    { idCandidate: 1, idQuestion: 16, idAnswer: 8, category: "javascript", categoryName: "JavaScript", answer: "incorrecto"}
-  ],
+  answers: [],
 
   questions: [
     { idQuestion: 1, category: 'html', categoryName: 'HTML', question: 'HTML significa "Hyper Text Markup Language"', correctAnswer: 'correcto' },
